@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <title>計算預計下班時間</title>
+    <style>
+        body {
+            font-size: 20px;
+        }
+        
+        @media screen and (min-width: 480px) {
+            body {
+                font-size: 30px;
+            }
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        select {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+        
+        button {
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        function calculateQuittingTime() {
+            var startTime = document.getElementById("start-time").value;
+            var workHours = document.getElementById("work-hours").value;
+            var workHoursParts = workHours.split(":");
+            var hours = parseInt(workHoursParts[0]);
+            var minutes = parseInt(workHoursParts[1]);
+            
+            var startTimeParts = startTime.split(":");
+            var startHour = parseInt(startTimeParts[0]);
+            var startMinute = parseInt(startTimeParts[1]);
+            
+            var totalMinutes = (hours * 60) + minutes;
+            var quittingHour = startHour + Math.floor(totalMinutes / 60);
+            var quittingMinute = startMinute + (totalMinutes % 60);
+            
+            if (quittingMinute >= 60) {
+                quittingMinute -= 60;
+                quittingHour += 1;
+            }
+            
+            if (quittingHour >= 24) {
+                quittingHour -= 24;
+            }
+            
+            var formattedQuittingHour = ("0" + quittingHour).slice(-2);
+            var formattedQuittingMinute = ("0" + quittingMinute).slice(-2);
+            
+            document.getElementById("quitting-time").textContent = "預計下班時間為：" + formattedQuittingHour + ":" + formattedQuittingMinute;
+        }
+    </script>
+    
+    <h1>計算預計下班時間</h1>
+    
+    <label for="start-time">起始時間：</label>
+    <select id="start-time">
+        <option value="09:00">09:00</option>
+        <option value="10:00">10:00</option>
+        <option value="11:00">11:00</option>
+        <!-- 其他選項 -->
+    </select>
+    
+    <label for="work-hours">工作時數：</label>
+    <select id="work-hours">
+        <option value="01:00">1 小時</option>
+        <option value="02:00">2 小時</option>
+        <option value="03:00">3 小時</option>
+        <!-- 其他選項 -->
+    </select>
+    
+    <button onclick="calculateQuittingTime()">計算下班時間</button>
+    
+    <div id="quitting-time"></div>
+</body>
+</html>
